@@ -62,7 +62,7 @@ namespace Program
         }
         public static void Main()
         {
-            int[] originalArray = { 15, 200, 3, 70, 130 };
+            int[] originalArray = { 0, 3, 6, 9, 12, 15, 15,12,9,6,3,0,-3,-6,-9,-12,-15,-15,-12,-9 };
             List<Point> coordinates =  ConvertArrayToPoints(originalArray);
 
 
@@ -76,18 +76,45 @@ namespace Program
 
             List<Point> normalizedPoints = Normalize(coordinates, rangeXMin , rangeXMax, rangeYMin , rangeYMax);
 
-            DrawChartLines(rangeYMax, rangeXMax);
+            //DrawChartLines(rangeYMax, rangeXMax);
 
 
-            foreach (var point in normalizedPoints)
+
+            for (int segmentIndex = 0; segmentIndex < normalizedPoints.Count - 1; segmentIndex++)
             {
-                
-                //Console.ForegroundColor = ConsoleColor.Black;
-                //Console.BackgroundColor = ConsoleColor.Red;
-                Console.SetCursorPosition( point.X,rangeYMax - point.Y);
-                Console.Write("\u2580");
+                int currentX;
+
+                for (currentX = normalizedPoints[segmentIndex].X; currentX < normalizedPoints[segmentIndex + 1].X; currentX++)
+                {
+                    Console.SetCursorPosition(currentX, rangeYMax - normalizedPoints[segmentIndex].Y);
+                    Console.Write("-");
+                }
+
+                int minY, maxY;
+                if (normalizedPoints[segmentIndex].Y < normalizedPoints[segmentIndex + 1].Y)
+                {
+                    minY = normalizedPoints[segmentIndex].Y;
+                    maxY = normalizedPoints[segmentIndex + 1].Y;
+                }
+                else
+                {
+                    minY = normalizedPoints[segmentIndex + 1].Y;
+                    maxY = normalizedPoints[segmentIndex].Y;
+                }
+
+                for (int currentY = minY; currentY < maxY; currentY++)
+                {
+                    Console.SetCursorPosition(currentX, rangeYMax - currentY);
+                    Console.Write("|");
+                }
             }
-            //Console.WriteLine("Press any key to close this window...");
+
+
+            //Console.ForegroundColor = ConsoleColor.Black;
+            //Console.BackgroundColor = ConsoleColor.Red;
+            // Console.SetCursorPosition( point.X,rangeYMax - point.Y);
+            //Console.Write("\u2580");
+
             Console.ReadKey();
 
         }
