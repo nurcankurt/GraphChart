@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Text;
+using System.Linq;
 
 namespace Program
 {
@@ -65,7 +66,14 @@ namespace Program
             int[] originalArray = { 0, 3, 6, 9, 12, 15, 15,12,9,6,3,0,-3,-6,-9,-12,-15,-15,-12,-9 };
             List<Point> coordinates =  ConvertArrayToPoints(originalArray);
 
+            //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+                // Register the IBM 437 encoding provider
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Encoding cp437 = Encoding.GetEncoding(437);
+            char symbol = cp437.GetChars(new byte[] { 196 })[0];
+            char vertical = cp437.GetChars(new byte[] { 179 })[0];
+            char corner;
             Console.Clear();
 
             int rangeXMin = Console.CursorLeft + 1;
@@ -87,25 +95,29 @@ namespace Program
                 for (currentX = normalizedPoints[segmentIndex].X; currentX < normalizedPoints[segmentIndex + 1].X; currentX++)
                 {
                     Console.SetCursorPosition(currentX, rangeYMax - normalizedPoints[segmentIndex].Y);
-                    Console.Write("-");
+                    Console.Write(symbol);
                 }
+
 
                 int minY, maxY;
                 if (normalizedPoints[segmentIndex].Y < normalizedPoints[segmentIndex + 1].Y)
                 {
                     minY = normalizedPoints[segmentIndex].Y;
                     maxY = normalizedPoints[segmentIndex + 1].Y;
+                    corner = cp437.GetChars(new byte[] { 219 })[0];
                 }
                 else
                 {
                     minY = normalizedPoints[segmentIndex + 1].Y;
                     maxY = normalizedPoints[segmentIndex].Y;
+                    corner = cp437.GetChars(new byte[] { 191 })[0]; //doğru değiştirme
                 }
 
+                Console.Write(corner);
                 for (int currentY = minY; currentY < maxY; currentY++)
                 {
                     Console.SetCursorPosition(currentX, rangeYMax - currentY);
-                    Console.Write("|");
+                    Console.Write(vertical);
                 }
             }
 
